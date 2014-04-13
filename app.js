@@ -37,11 +37,11 @@ T.get('statuses/user_timeline', {screen_name: 'BCPrintShop'}, function(err, repl
 
   //Every 10 seconds make the call
   setInterval(function () {
-    console.log('Making call-----------------------------------------------------------');
+    console.log('Checking-----------------------------------------------------------');
     
     //If it's not the weekend
     if (moment().day() != 6 && moment().day() != 0) {
-      console.log('Weekday.');
+      console.log('Weekday. Making call');
       
       request(options, function (error, response, body) {
         $ = cheerio.load(body);
@@ -85,8 +85,8 @@ T.get('statuses/user_timeline', {screen_name: 'BCPrintShop'}, function(err, repl
 
             var eightAMOne = moment().hour(8).minute(0).second(0);
             var eightAMTwo = moment().hour(8).minute(0).second(20);
-            var fourPMOne = moment().hour(16).minute(0).second(0);
-            var fourPMTwo = moment().hour(16).minute(0).second(20);
+            var fourPMOne = moment().hour(16).minute(30).second(0);
+            var fourPMTwo = moment().hour(16).minute(30).second(20);
             var now = moment();
             //Goodmorning sunshine
             if (now.isAfter(eightAMOne) && now.isBefore(eightAMTwo)) {
@@ -118,7 +118,7 @@ T.get('statuses/user_timeline', {screen_name: 'BCPrintShop'}, function(err, repl
         } else {
           day = 'SUNDAY';
         }
-        post = 'HAVA A LOVLEY '  + day + '. THE PRINT SHOP IS STILL CLOSED.';
+        post = 'HAVE A LOVLEY '  + day + '. THE PRINT SHOP IS STILL CLOSED.';
         console.log('Goodmorning weekend tweet fired.');
         T.post('statuses/update', { status: post }, function(err, reply) {console.log(err);});
       }
