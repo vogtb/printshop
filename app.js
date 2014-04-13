@@ -35,13 +35,13 @@ T.get('statuses/user_timeline', {screen_name: 'BCPrintShop'}, function(err, repl
     }
   }
 
-  //Every 10 seconds make the call
+  //Every 20 seconds make the call
   setInterval(function () {
     console.log('Checking-----------------------------------------------------------');
     
     //If it's not the weekend
     if (moment().day() != 6 && moment().day() != 0) {
-      console.log('Weekday. Making call');
+      console.log('Weekday. Making request.');
       
       request(options, function (error, response, body) {
         $ = cheerio.load(body);
