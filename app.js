@@ -27,7 +27,13 @@ var options = {
 
 //Find the latest tweet on start up.
 T.get('statuses/user_timeline', {screen_name: 'BCPrintShop'}, function(err, reply) {
-  var latestTweet = moment(reply[0].created_at.replace('+0000 ', ''), 'ddd MMM DD HH:mm:ss YYYY');
+  for (var i = 0; i <= reply.length; i++) {
+    //If it doesn't have an exclaimation point.
+    if (reply[i].text.search('!') == -1) {
+      var latestTweet = moment(reply[i].created_at.replace('+0000 ', ''), 'ddd MMM DD HH:mm:ss YYYY');
+      break;
+    }
+  }
 
   //Every 10 seconds make the call
   setInterval(function () {
@@ -61,13 +67,19 @@ T.get('statuses/user_timeline', {screen_name: 'BCPrintShop'}, function(err, repl
               if (title.search('clos') >= 1) {
                 console.log('PS Closing tweet fired.');
                 post = 'THE PRINT SHOP CLOSING. ' + href;
-                T.post('statuses/update', { status: post }, function(err, reply) {console.log(err);});
+                T.post('statuses/update', { status: post }, function(err, reply) {
+                  console.log(err);
+                  latestTweet = moment();
+                });
               } else
               //Post Hours
               if (title.search('hour') >= 1) {
                 console.log('PS Closing tweet fired.');
                 post = 'THE PRINT SHOP HOURS HAVE CHANGED. ' + href;
-                T.post('statuses/update', { status: post }, function(err, reply) {console.log(err);});
+                T.post('statuses/update', { status: post }, function(err, reply) {
+                  console.log(err);
+                  latestTweet = moment();
+                });
               }
             }
 
@@ -86,7 +98,7 @@ T.get('statuses/user_timeline', {screen_name: 'BCPrintShop'}, function(err, repl
             //Goodnight sunshine
             if (now.isAfter(fourPMOne) && now.isBefore(fourPMTwo)) {
               console.log('Goodnight tweet fired.');
-              post = 'IT IS 4PM AND THE PRINT SHOP IS NOW CLOSED.';
+              post = 'GOOD NIGHT! PRINT SHOP IS NOW CLOSED.';
               T.post('statuses/update', { status: post }, function(err, reply) {console.log(err);});
             }
           
@@ -96,6 +108,20 @@ T.get('statuses/user_timeline', {screen_name: 'BCPrintShop'}, function(err, repl
     
     } else {
       console.log("Weekend!");
+      var noonOne = moment().hour(12).minute(0).second(0);
+      var noonTwo = moment().hour(12).minute(0).second(20);
+      var now = moment();
+      if (now.isAfter(noonOne) && now.isBefore(noonTwo)) {
+        var day;
+        if (moment().day() == 6) {
+          day = 'SATURDAY';
+        } else {
+          day = 'SUNDAY';
+        }
+        post = 'HAVA A LOVLEY '  + day + '. THE PRINT SHOP IS STILL CLOSED.';
+        console.log('Goodmorning weekend tweet fired.');
+        T.post('statuses/update', { status: post }, function(err, reply) {console.log(err);});
+      }
     }
   }, 20000);
 
