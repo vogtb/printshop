@@ -35,17 +35,17 @@ T.get('statuses/user_timeline', {screen_name: 'BCPrintShop'}, function(err, repl
     }
   }
 
-  //Every 20 seconds make the call
+  //Every 50 seconds make the call
   setInterval(function () {
-    console.log('Checking-----------------------------------------------------------');
+    console.log(moment().toString() + ' Checking-----------------------------------------------------------');
     
     //If it's not the weekend
     if (moment().day() != 6 && moment().day() != 0) {
-      console.log('Weekday. Making request.');
+      console.log(moment().toString() + ' Weekday. Making request.');
       
       request(options, function (error, response, body) {
         if (!error) {
-          console.log('No error in stuboard request.');
+          console.log(moment().toString() + ' No error in stuboard request.');
           $ = cheerio.load(body);
           $('div.messages-list').find('li').each(function(i, elem) {
             //If this posting is about the print shop.
@@ -67,53 +67,53 @@ T.get('statuses/user_timeline', {screen_name: 'BCPrintShop'}, function(err, repl
                 var post;
                 //Post Closing
                 if (title.search('clos') >= 1) {
-                  console.log('PS Closing tweet fired.');
+                  console.log(moment().toString() + 'PS Closing tweet fired. ');
                   post = 'THE PRINT SHOP CLOSING. ' + href;
                   T.post('statuses/update', { status: post }, function(err, reply) {
-                    console.log(err);
+                    console.log(moment().toString() + err.toString());
                     latestTweet = moment();
                   });
                 } else
                 //Post Hours
                 if (title.search('hour') >= 1) {
-                  console.log('PS Closing tweet fired.');
+                  console.log(moment().toString() + ' PS Closing tweet fired.');
                   post = 'THE PRINT SHOP HOURS HAVE CHANGED. ' + href;
                   T.post('statuses/update', { status: post }, function(err, reply) {
-                    console.log(err);
+                    console.log(moment().toString() + err.toString());
                     latestTweet = moment();
                   });
                 }
               }
 
               var eightAMOne = moment().hour(8).minute(0).second(0);
-              var eightAMTwo = moment().hour(8).minute(0).second(20);
+              var eightAMTwo = moment().hour(8).minute(0).second(50);
               var fourPMOne = moment().hour(16).minute(30).second(0);
-              var fourPMTwo = moment().hour(16).minute(30).second(20);
+              var fourPMTwo = moment().hour(16).minute(30).second(50);
               var now = moment();
               //Goodmorning sunshine
               if (now.isAfter(eightAMOne) && now.isBefore(eightAMTwo)) {
-                console.log('Goodmorning tweet fired.');
+                console.log(moment().toString() + ' Goodmorning tweet fired.');
                 post = 'GOOD MORNING! THE PRINT SHOP IS NOW OPEN!';
                 T.post('statuses/update', { status: post }, function(err, reply) {console.log(err);});
               }
 
               //Goodnight sunshine
               if (now.isAfter(fourPMOne) && now.isBefore(fourPMTwo)) {
-                console.log('Goodnight tweet fired.');
+                console.log(moment().toString() + ' Goodnight tweet fired. ');
                 post = 'GOOD NIGHT! PRINT SHOP IS NOW CLOSED.';
                 T.post('statuses/update', { status: post }, function(err, reply) {console.log(err);});
               }
             }
           });
         } else {
-          console.log('Error in stuboard request.')
+          console.log(moment().toString() + ' Error in stuboard request. ')
         }
       });
     
     } else {
-      console.log("Weekend!");
+      console.log(moment().toString() + ' Weekend!');
       var noonOne = moment().hour(12).minute(0).second(0);
-      var noonTwo = moment().hour(12).minute(0).second(20);
+      var noonTwo = moment().hour(12).minute(0).second(50);
       var now = moment();
       if (now.isAfter(noonOne) && now.isBefore(noonTwo)) {
         var day;
@@ -123,11 +123,11 @@ T.get('statuses/user_timeline', {screen_name: 'BCPrintShop'}, function(err, repl
           day = 'SUNDAY';
         }
         post = 'HAVE A LOVLEY '  + day + '. THE PRINT SHOP IS STILL CLOSED.';
-        console.log('Goodmorning weekend tweet fired.');
+        console.log(moment().toString() + 'Goodmorning weekend tweet fired.');
         T.post('statuses/update', { status: post }, function(err, reply) {console.log(err);});
       }
     }
-  }, 20000);
+  }, 50000);
 
 });
 
