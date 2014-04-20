@@ -122,7 +122,7 @@ T.get('statuses/user_timeline', {screen_name: 'BCPrintShop'}, function(err, repl
         } else {
           day = 'SUNDAY';
         }
-        post = 'HAVE A LOVLEY '  + day + '. THE PRINT SHOP IS STILL CLOSED.';
+        post = 'HAVE A LOVELY '  + day + '. THE PRINT SHOP IS STILL CLOSED.';
         console.log(moment().toString() + 'Goodmorning weekend tweet fired.');
         T.post('statuses/update', { status: post }, function(err, reply) {console.log(err);});
       }
